@@ -6,163 +6,350 @@
   <meta name="google-site-verification" content="9FCeo_a0PpLxvgQ2P89cvEpvmdI0DIKvEN-h03F3AJU" />
   <title>Ghufrān's Salafi Archive</title>
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
   <style>
-    body { font-family: Arial, sans-serif; background: #111; color: #eee; margin: 0; padding: 20px; }
-    h1 { text-align: center; }
-    #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; margin-top: 20px; }
-    .card { background: #1c1c1c; padding: 15px; border-radius: 8px; border: 1px solid #333; }
-    a { color: #4fc3f7; text-decoration: none; }
-    a:hover { text-decoration: underline; }
+    :root {
+      --bg: #0d0d0f;
+      --surface: rgba(255, 255, 255, 0.04);
+      --surface-hover: rgba(255, 255, 255, 0.07);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(255, 255, 255, 0.16);
+      --text: #e2e2e4;
+      --text-dim: #888892;
+      --text-muted: #4a4a55;
+      --accent: #fe9a54;
+      --accent-dim: rgba(254, 154, 84, 0.1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /*looks*/
+    body::before {
+      content: '';
+      position: fixed;
+      top: -300px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 600px;
+      background: radial-gradient(ellipse at center, rgba(254, 154, 84, 0.05) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /*Header for the index*/
+    header {
+      padding: 64px 0 48px;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .logo-row img {
+      height: 40px;
+      opacity: 0.5;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+      font-weight: 500;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+
+    .meta {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+    .meta span { display: block; }
+
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      margin: 32px 0;
+    }
+
+    /*CTA*/
+    .cta-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(254, 154, 84, 0.2);
+      color: #fe9a54;
+      font-size: 0.82rem;
+      font-weight: 400;
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .cta-link:hover {
+      background: rgba(254, 154, 84, 0.16);
+      border-color: rgba(254, 154, 84, 0.35);
+    }
+
+    /*Search bar*/
+    .search-bar {
+      display: flex;
+      align-items: center;
+      margin-top: 20px;
+      max-width: 480px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .search-bar:focus-within {
+      border-color: rgba(254, 154, 84, 0.35);
+      box-shadow: 0 0 0 3px rgba(254, 154, 84, 0.07);
+    }
+    .search-icon {
+      flex-shrink: 0;
+      margin-left: 14px;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+    .search-bar input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      padding: 11px 12px;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 0.875rem;
+      font-weight: 300;
+      color: var(--text);
+    }
+    .search-bar input::placeholder { color: var(--text-muted); }
+    .search-bar button {
+      flex-shrink: 0;
+      background: rgba(254, 154, 84, 0.1);
+      border: none;
+      border-left: 1px solid var(--border);
+      padding: 11px 18px;
+      color: #fe9a54;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .search-bar button:hover { background: rgba(254, 154, 84, 0.18); }
+
+    /*Section label*/
+    .section-label {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 14px;
+      animation: fadeUp 0.6s ease 0.1s both;
+    }
+    .section-label h2 {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .section-label span {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /*Grid for the websites*/
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 8px;
+    }
+
+    /*Websites - copy paste if I add more later*/
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
+      animation: fadeUp 0.5s ease both;
+    }
+    .card:hover {
+      background: var(--surface-hover);
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+    }
+
+    .card-name {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .card a {
+      font-size: 0.78rem;
+      color: var(--accent);
+      text-decoration: none;
+      opacity: 0.85;
+      transition: opacity 0.15s;
+    }
+    .card a:hover { opacity: 1; text-decoration: underline; }
+
+    /* stagger the sites in animation*/
+    #grid .card:nth-child(1)  { animation-delay: 0.05s; }
+    #grid .card:nth-child(2)  { animation-delay: 0.07s; }
+    #grid .card:nth-child(3)  { animation-delay: 0.09s; }
+    #grid .card:nth-child(4)  { animation-delay: 0.11s; }
+    #grid .card:nth-child(5)  { animation-delay: 0.13s; }
+    #grid .card:nth-child(6)  { animation-delay: 0.15s; }
+    #grid .card:nth-child(7)  { animation-delay: 0.17s; }
+    #grid .card:nth-child(8)  { animation-delay: 0.19s; }
+    #grid .card:nth-child(9)  { animation-delay: 0.21s; }
+    #grid .card:nth-child(10) { animation-delay: 0.23s; }
+    #grid .card:nth-child(11) { animation-delay: 0.25s; }
+    #grid .card:nth-child(12) { animation-delay: 0.27s; }
+    #grid .card:nth-child(13) { animation-delay: 0.29s; }
+    #grid .card:nth-child(14) { animation-delay: 0.31s; }
+    #grid .card:nth-child(15) { animation-delay: 0.33s; }
+    #grid .card:nth-child(16) { animation-delay: 0.35s; }
+    #grid .card:nth-child(17) { animation-delay: 0.37s; }
+    #grid .card:nth-child(18) { animation-delay: 0.39s; }
+    #grid .card:nth-child(19) { animation-delay: 0.41s; }
+    #grid .card:nth-child(20) { animation-delay: 0.43s; }
+    #grid .card:nth-child(21) { animation-delay: 0.45s; }
+    #grid .card:nth-child(22) { animation-delay: 0.47s; }
+    #grid .card:nth-child(23) { animation-delay: 0.49s; }
+    #grid .card:nth-child(24) { animation-delay: 0.51s; }
+    #grid .card:nth-child(25) { animation-delay: 0.53s; }
+    #grid .card:nth-child(26) { animation-delay: 0.55s; }
+    #grid .card:nth-child(27) { animation-delay: 0.57s; }
+    #grid .card:nth-child(28) { animation-delay: 0.59s; }
+    #grid .card:nth-child(29) { animation-delay: 0.61s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /*Footer of the index*/
+    footer {
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /*Mobile optimisations - revisit this*/
+    @media (max-width: 560px) {
+      .wrapper { padding: 0 16px 60px; }
+      header { padding: 40px 0 36px; }
+      #grid { grid-template-columns: 1fr 1fr; gap: 7px; }
+      .card { padding: 13px 14px; }
+    }
+    @media (max-width: 360px) {
+      #grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
-  <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
-    <h1 style="margin: 0;">Ghufrān's Salafi Archive</h1>
-    <img src="ghufran.png" alt="Logo" style="height: 60px; opacity: 0.7;" />
-    <img src="thathiyal.png" alt="Logo2" style="height: 60px; opacity: 0.7;" />
+
+  <div class="wrapper">
+
+    <header>
+      <div class="logo-row">
+        <img src="ghufran.png" alt="Ghufrān logo" />
+        <img src="thathiyal.png" alt="Institute logo" />
+      </div>
+      <h1>Ghufrān's Salafi Archive</h1>
+      <div class="meta">
+        <span>Websites preserved in fear that they could go offline.</span>
+        <span>As static archives, some functions won't work - search works on most sites.</span>
+      </div>
+      <div class="divider"></div>
+      <a class="cta-link" href="https://beacons.ai/ghufranalmuwahhid" target="_blank" rel="noopener noreferrer">
+        YouTube · TikTok · Telegram Institute ↗
+      </a>
+
+      <form class="search-bar" action="https://www.google.com/search" method="get" target="_blank">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" name="q" placeholder="Search all websites at once!" autocomplete="off" />
+        <button type="submit">Search</button>
+      </form>
+    </header>
+
+    <div class="section-label">
+      <h2>English Websites</h2>
+      <span>98,895 files archived</span>
+    </div>
+
+    <div id="grid">
+      <div class="card"><div class="card-name">AbdurRahman.org</div><a href="https://ghufrxn.github.io/salafiarchiveabdurrahmanorg/" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">AboveTheThrone.com</div><a href="https://ghufrxn.github.io/salafiarchive/abovethethrone.com/www.abovethethrone.com/arsh/index.html" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">AbuAminaElias.com</div><a href="https://ghufrxn.github.io/salafiarchive/abuaminaelias.com/www.abuaminaelias.com/index.html" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">AbuHakeem.com</div><a href="https://ghufrxn.github.io/salafiarchive/abuhakeem.com/abuhakeem.com/index.html" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">AhlulHadeeth.wordpress.com</div><a href="https://ghufrxn.github.io/salafiarchive/ahlulhadeeth.wordpress.com/ahlulhadeeth.wordpress.com/index.html" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">Aqidah.com</div><a href="https://ghufrxn.github.io/salafiarchive/aqidah.com/www.aqidah.com/creed/index.html" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">Asharis.com</div><a href="https://ghufrxn.github.io/salafiarchive/asharis.com/www.asharis.com/creed/index.html" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">Barelwis.com</div><a href="https://ghufrxn.github.io/salafiarchive/barelwis.com/www.barelwis.com/index.html" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">Bidah.com</div><a href="https://ghufrxn.github.io/salafiarchive/bidah.com/www.bidah.com/index.html" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">Dajjaal.com</div><a href="https://ghufrxn.github.io/salafiarchive/dajjaal.com/www.dajjaal.com/liar/index.html" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">Forum.SalafiRI.com</div><a href="https://ghufrxn.github.io/salafiarchive/forum.salafiri.com/forum.salafiri.com/index.html" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">Ikhwanis.com</div><a href="https://ghufrxn.github.io/salafiarchive/ikhwanis.com/www.ikhwanis.com/index.html" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">IslamAgainstExtremism.com</div><a href="https://ghufrxn.github.io/salafiarchive/islamagainstextremism.com/www.islamagainstextremism.com/index.html" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">IslamJesus.ws</div><a href="https://ghufrxn.github.io/salafiarchive/islamjesus.ws/www.islamjesus.ws/index.html" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">IslamMoses.com</div><a href="https://ghufrxn.github.io/salafiarchive/islammoses.com/im/index.htm" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">Kharijites.com</div><a href="https://ghufrxn.github.io/salafiarchive/kharijites.com/www.kharijites.com/kj/index.htm" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">Manhaj.com</div><a href="https://ghufrxn.github.io/salafiarchive/manhaj.com/www.manhaj.com/manhaj/index.html" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">Maturidis.com</div><a href="https://ghufrxn.github.io/salafiarchive/maturidis.com/www.maturidis.com/maturidi/index.html" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">Mutazilah.com</div><a href="https://ghufrxn.github.io/salafiarchive/mutazilah.com/www.mutazilah.com/index.html" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">Nabahani.com</div><a href="https://ghufrxn.github.io/salafiarchive/nabahani.com/www.nabahani.com/index.html" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">ProphetMuhammad.name</div><a href="https://ghufrxn.github.io/salafiarchive/prophetmuhammad.name/www.prophetmuhammad.name/index.html" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">SalafiRI.com</div><a href="https://ghufrxn.github.io/salafiarchive/salafiri.com/www.salafiri.com/index.html" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">Salafis.com</div><a href="https://ghufrxn.github.io/salafiarchive/salafis.com/www.salafis.com/index.html" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">Takfiris.com</div><a href="https://ghufrxn.github.io/salafiarchive/takfiris.com/www.takfiris.com/takfir/index.html" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">TawhidFirst.com</div><a href="https://ghufrxn.github.io/salafiarchive/tawhidfirst.com/www.tawhidfirst.com/monotheism/index.html" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">TheMadkhalis.com</div><a href="https://ghufrxn.github.io/salafiarchive/themadkhalis.com/www.themadkhalis.com/md/index.html" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">TwelverShia.net</div><a href="https://ghufrxn.github.io/salafiarchive/twelvershia.net/www.twelvershia.net/index.html" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">UmAbdullah.wordpress.com</div><a href="https://ghufrxn.github.io/salafiarchive/umabdullah.wordpress/umabdullah.wordpress.com/index.html" target="_blank">Open site</a></div>
+      <div class="card"><div class="card-name">Wahhabis.com</div><a href="https://ghufrxn.github.io/salafiarchive/wahhabis.com/www.wahhabis.com/index.html" target="_blank">Open site</a></div>
+    </div>
+
+    <footer>Ghufrān's Salafi Archive — preserved for the sake of knowledge</footer>
+
   </div>
-  <h3 style="text-align: center; font-weight: normal; color: #bbb; margin-top: 8px;">
-    Websites listed below were archived in fear that they could go offline!
-  </h3>
-  <h5 style="text-align: center; font-weight: normal; color: #bbb; margin-top: 2px;">
-    As these are static archives, some website functions won't work. The search function works on most websites.
-  </h5>
 
-  <div
-  ></div>
-
-  <h3 style="text-align: center; font-weight: normal; color: #bbb; margin-top: 8px;">
-    <a href="https://beacons.ai/ghufranalmuwahhid" target="_blank" rel="noopener noreferrer" style="color: #ff9954; text-decoration: none;">
-    Click here to see my YouTube, TikTok, Telegram Institute
-    </a>
-  </h3>
-
-  <div style="height: 50px; width: 80%;"></div>
-
-  <h3 style="text-align: left; font-weight: normal; color: #bbb; margin-top: 8px;">
-    English Websites
-  </h3>
-  <h5 style="text-align: left; font-weight: normal; color: #bbb; margin-top: 2px;">
-    Count: 98,895 individual webpages/files archived and preserved
-  </h5>
-
-  <div id="grid">
-    <div class="card">
-      <strong>AbdurRahman.org</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchiveabdurrahmanorg/" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>AboveTheThrone.com</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/abovethethrone.com/www.abovethethrone.com/arsh/index.html" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>AbuAminaElias.com</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/abuaminaelias.com/www.abuaminaelias.com/index.html" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>AbuHakeem.com</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/abuhakeem.com/abuhakeem.com/index.html" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>AhlulHadeeth.wordpress.com</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/ahlulhadeeth.wordpress.com/ahlulhadeeth.wordpress.com/index.html" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>Aqidah.com</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/aqidah.com/www.aqidah.com/creed/index.html" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>Asharis.com</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/asharis.com/www.asharis.com/creed/index.html" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>Barelwis.com</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/barelwis.com/www.barelwis.com/index.html" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>Bidah.com</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/bidah.com/www.bidah.com/index.html" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>Dajjaal.com</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/dajjaal.com/www.dajjaal.com/liar/index.html" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>Forum.SalafiRI.com</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/forum.salafiri.com/forum.salafiri.com/index.html" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>Ikhwanis.com</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/ikhwanis.com/www.ikhwanis.com/index.html" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>IslamAgainstExtremism.com</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/islamagainstextremism.com/www.islamagainstextremism.com/index.html" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>IslamJesus.ws</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/islamjesus.ws/www.islamjesus.ws/index.html" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>IslamMoses.com</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/islammoses.com/im/index.htm" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>Kharijites.com</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/kharijites.com/www.kharijites.com/kj/index.htm" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>Manhaj.com</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/manhaj.com/www.manhaj.com/manhaj/index.html" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>Maturidis.com</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/maturidis.com/www.maturidis.com/maturidi/index.html" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>Mutazilah.com</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/mutazilah.com/www.mutazilah.com/index.html" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>Nabahani.com</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/nabahani.com/www.nabahani.com/index.html" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>ProphetMuhammad.name</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/prophetmuhammad.name/www.prophetmuhammad.name/index.html" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>SalafiRI.com</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/salafiri.com/www.salafiri.com/index.html" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>Salafis.com</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/salafis.com/www.salafis.com/index.html" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>Takfiris.com</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/takfiris.com/www.takfiris.com/takfir/index.html" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>TawhidFirst.com</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/tawhidfirst.com/www.tawhidfirst.com/monotheism/index.html" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>TheMadkhalis.com</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/themadkhalis.com/www.themadkhalis.com/md/index.html" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>TwelverShia.net</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/twelvershia.net/www.twelvershia.net/index.html" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>UmAbdullah.wordpress.com</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/umabdullah.wordpress/umabdullah.wordpress.com/index.html" target="_blank">Open site</a>
-    </div>
-    <div class="card">
-      <strong>Wahhabis.com</strong><br>
-      <a href="https://ghufrxn.github.io/salafiarchive/wahhabis.com/www.wahhabis.com/index.html" target="_blank">Open site</a>
-    </div>
-  </div>
 </body>
 </html>
