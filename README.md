@@ -26,7 +26,7 @@ A custom index page with a built-in search engine (powered by Google CSE) lets y
 |---|---|
 | ✅ Reading and browsing articles | Works fully |
 | ✅ Entire Archive search | Works via Google CSE |
-| ✅ Working download links | 99.999% of content available |
+| ✅ Working download links | 99.99% of content available |
 | ⚠️ Logins, posting comments, forms | Not supported in static archives |
 
 ---
