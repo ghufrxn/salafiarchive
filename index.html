@@ -365,6 +365,38 @@
     @media (max-width: 360px) {
       #grid { grid-template-columns: 1fr; }
     }
+    /*CSE results panel*/
+    .search-results-wrap { margin-top: 8px; }
+    /* Hide Google's injected search box*/
+    .gsc-search-box, .gsc-above-wrapper-area, .gsc-refinementsArea,
+    table.gsc-search-box, .gsc-search-box-tools { display: none !important; }
+    /* Results container */
+    .search-results-wrap .gsc-results-wrapper-nooverlay,
+    .search-results-wrap .gsc-results-wrapper-visible {
+      background: rgba(13,13,15,0.95) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      border-radius: 10px !important;
+      overflow: hidden !important;
+      padding: 0 !important;
+      margin-top: 0 !important;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
+    }
+    .gsc-webResult.gsc-result {
+      border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+      padding: 12px 16px !important;
+      background: transparent !important;
+      border-radius: 0 !important;
+    }
+    .gsc-webResult.gsc-result:hover { background: rgba(255,255,255,0.04) !important; }
+    .gs-title, .gs-title * { color: #fe9a54 !important; font-size: 0.88rem !important; text-decoration: none !important; }
+    .gs-title:hover, .gs-title *:hover { text-decoration: underline !important; }
+    .gs-snippet { color: #888892 !important; font-size: 0.78rem !important; line-height: 1.5 !important; }
+    .gs-visibleUrl, .gs-visibleUrl-long { color: #4a4a55 !important; font-size: 0.72rem !important; }
+    .gsc-cursor-box { padding: 10px 16px !important; background: transparent !important; }
+    .gsc-cursor-page { color: #888892 !important; background: rgba(255,255,255,0.04) !important; border: 1px solid rgba(255,255,255,0.08) !important; border-radius: 4px !important; padding: 3px 8px !important; margin: 0 2px !important; }
+    .gsc-cursor-current-page { color: #fe9a54 !important; background: rgba(254,154,84,0.1) !important; border-color: rgba(254,154,84,0.3) !important; }
+    .gcsc-find-more-on-google, .gsc-branding { display: none !important; }
+
   </style>
 </head>
 <body>
@@ -386,43 +418,37 @@
         YouTube · TikTok · Telegram Institute ↗
       </a>
       <div class="search-wrap">
-              <div class="search-bar">
-                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <input id="cse-input" type="text" placeholder="Search all archived websites…" autocomplete="off" />
-                <button id="cse-btn" type="button">Search</button>
-              </div>
-              <div class="search-results-wrap">
-                <div class="gcse-searchresults-only" data-queryParameterName="q" data-defaultToImageSearch="false" data-linkTarget="_blank"></div>
-              </div>
-            </div>
-            <script async src="https://cse.google.com/cse.js?cx=80e3a624073994811"></script>
-            <script>
-              function doSearch() {
-                const q = document.getElementById('cse-input').value.trim();
-                if (!q) return;
-                if (window.google && google.search && google.search.cse && google.search.cse.element) {
-                  const el = google.search.cse.element.getElement('searchresults-only0');
-                  if (el) { el.execute(q); return; }
-                }
-                window.__pendingSearch = q;
-              }
-              document.getElementById('cse-btn').addEventListener('click', doSearch);
-              document.getElementById('cse-input').addEventListener('keydown', e => {
-                if (e.key === 'Enter') doSearch();
-              });
-              window.__gcse = { callback: function() {
-                if (window.__pendingSearch) {
-                  const el = google.search.cse.element.getElement('searchresults-only0');
-                  if (el) el.execute(window.__pendingSearch);
-                  window.__pendingSearch = null;
-                }
-              }};
-            </script>
+        <div class="search-bar">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="cse-input" type="text" placeholder="Search all archived websites…" autocomplete="off" />
+          <button id="cse-btn" type="button">Search</button>
+        </div>
+        <div class="search-results-wrap">
+          <div class="gcse-searchresults-only"></div>
+        </div>
+      </div>
+      <script async src="https://cse.google.com/cse.js?cx=80e3a624073994811"></script>
+      <script>
+        function doSearch() {
+          var q = document.getElementById('cse-input').value.trim();
+          if (!q) return;
+          var el = document.querySelector('.gsc-search-box input.gsc-input, input.gsc-input');
+          if (el) {
+            el.value = q;
+            var btn = document.querySelector('.gsc-search-button, button.gsc-search-button-v2');
+            if (btn) btn.click();
+          }
+        }
+        document.getElementById('cse-btn').addEventListener('click', doSearch);
+        document.getElementById('cse-input').addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') doSearch();
+        });
+      </script>
     </header>
 
     <div class="section-label">
       <h2>English Websites</h2>
-      <span>98,895 individual webpages/files archived and preserved · Websites do not neccesarily reflect my own opinions!</span>
+      <span>98,895 individual webpages/files archived and preserved</span>
     </div>
 
     <div class="section-label">
