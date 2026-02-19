@@ -8,7 +8,7 @@ Browse the archive → __**https://ghufrxn.github.io/salafiarchive**__
 
 ## About
 
-Many valuable Islamic websites - covering Aqidah, Manhaj, Ruddud, and Da'wah - have quietly disappeared from the internet over the years, taking hard work and valuable resources for the common Muslim with them. This project crawls and preserves complete static snapshots of those sites before the same happens to them.
+Many valuable Islamic websites - covering Aqidah, Manhaj, Rudud, and Da'wah - have quietly disappeared from the internet over the years, taking hard work and valuable resources for the common Muslim with them. This project crawls and preserves complete static snapshots of those sites before the same happens to them.
 
 The archive currently holds **98,895 individual webpages and files** across 29 English-language websites, all freely accessible and searchable.
 
