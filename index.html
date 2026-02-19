@@ -15,7 +15,7 @@
       --surface: rgba(255, 255, 255, 0.04);
       --surface-hover: rgba(255, 255, 255, 0.07);
       --border: rgba(255, 255, 255, 0.08);
-      --border-hover: rgba(255, 255, 255, 0.16);
+      --border-hover: rgba(255, 255, 255, 0.18);
       --text: #e2e2e4;
       --text-dim: #888892;
       --text-muted: #4a4a55;
@@ -33,7 +33,6 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /*looks*/
     body::before {
       content: '';
       position: fixed;
@@ -55,22 +54,18 @@
       padding: 0 24px 80px;
     }
 
-    /*Header for the index*/
+    /*Header*/
     header {
       padding: 64px 0 48px;
       animation: fadeUp 0.6s ease both;
     }
-
     .logo-row {
       display: flex;
       align-items: center;
       gap: 14px;
       margin-bottom: 20px;
     }
-    .logo-row img {
-      height: 40px;
-      opacity: 0.5;
-    }
+    .logo-row img { height: 40px; opacity: 0.5; }
 
     h1 {
       font-family: 'Playfair Display', serif;
@@ -97,7 +92,6 @@
       margin: 32px 0;
     }
 
-    /*CTA*/
     .cta-link {
       display: inline-flex;
       align-items: center;
@@ -117,7 +111,6 @@
       border-color: rgba(254, 154, 84, 0.35);
     }
 
-    /*Search bar*/
     .search-bar {
       display: flex;
       align-items: center;
@@ -181,53 +174,144 @@
       text-transform: uppercase;
       color: var(--text-muted);
     }
-    .section-label span {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-    }
+    .section-label span { font-size: 0.78rem; color: var(--text-muted); }
 
-    /*Grid for the websites*/
+    /*Grid*/
     #grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 8px;
     }
 
-    /*Websites - copy paste if I add more later*/
+    /*Card shell*/
     .card {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      animation: fadeUp 0.5s ease both;
+      height: 68px;
+      transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                  box-shadow 0.35s ease;
+    }
+
+    /* collapsed face */
+    .card-base {
+      position: absolute;
+      inset: 0;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 16px 18px;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      transition: background 0.2s, border-color 0.2s, transform 0.2s;
-      animation: fadeUp 0.5s ease both;
+      padding: 0 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: opacity 0.2s ease, border-color 0.2s ease;
     }
-    .card:hover {
-      background: var(--surface-hover);
-      border-color: var(--border-hover);
-      transform: translateY(-2px);
-    }
-
     .card-name {
       font-size: 0.82rem;
       font-weight: 500;
       color: var(--text);
-      margin-bottom: 8px;
       line-height: 1.4;
     }
+    .card-hint { display: none; }
 
-    .card a {
-      font-size: 0.78rem;
-      color: var(--accent);
-      text-decoration: none;
-      opacity: 0.85;
-      transition: opacity 0.15s;
+    /* expanded preview */
+    .card-preview {
+      position: absolute;
+      inset: 0;
+      border-radius: 10px;
+      overflow: hidden;
+      opacity: 0;
+      transform: scale(0.96) translateY(4px);
+      transition: opacity 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+      border: 1px solid rgba(255,255,255,0.12);
     }
-    .card a:hover { opacity: 1; text-decoration: underline; }
 
-    /* stagger the sites in animation*/
+    /* if i wanna add images */
+    .card-preview-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.07);
+      transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+      filter: brightness(0.4) saturate(0.7);
+    }
+
+    /* liquid glass layer */
+    .card-preview-glass {
+      position: absolute;
+      inset: 0;
+      background: rgba(10, 10, 12, 0.5);
+      backdrop-filter: blur(20px) saturate(1.5);
+      -webkit-backdrop-filter: blur(20px) saturate(1.5);
+    }
+
+    /* content */
+    .card-preview-content {
+      position: relative;
+      z-index: 2;
+      padding: 16px 18px 15px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .card-preview-name {
+      font-size: 0.83rem;
+      font-weight: 500;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .card-preview-desc {
+      font-size: 0.76rem;
+      font-weight: 300;
+      color: rgba(226, 226, 228, 0.7);
+      line-height: 1.55;
+      flex: 1;
+    }
+    .card-visit-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 12px;
+      padding: 6px 13px;
+      border-radius: 6px;
+      background: rgba(254, 154, 84, 0.15);
+      border: 1px solid rgba(254, 154, 84, 0.3);
+      color: #fe9a54;
+      font-size: 0.76rem;
+      font-weight: 500;
+      text-decoration: none;
+      font-family: 'Inter', system-ui, sans-serif;
+      transition: background 0.2s, border-color 0.2s;
+      align-self: flex-start;
+      cursor: pointer;
+    }
+    .card-visit-btn:hover {
+      background: rgba(254, 154, 84, 0.26);
+      border-color: rgba(254, 154, 84, 0.5);
+    }
+
+    /* EXPANDED STATE */
+    .card.expanded {
+      height: 200px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5),
+                  0 0 0 1px rgba(254, 154, 84, 0.12);
+      z-index: 10;
+    }
+    .card.expanded .card-base { opacity: 0; pointer-events: none; }
+    .card.expanded .card-preview {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      pointer-events: auto;
+    }
+    .card.expanded .card-preview-bg { transform: scale(1); }
+
+    /* stagger */
     #grid .card:nth-child(1)  { animation-delay: 0.05s; }
     #grid .card:nth-child(2)  { animation-delay: 0.07s; }
     #grid .card:nth-child(3)  { animation-delay: 0.09s; }
@@ -263,7 +347,7 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /*Footer of the index*/
+    /*Footer*/
     footer {
       margin-top: 60px;
       padding-top: 24px;
@@ -272,12 +356,11 @@
       color: var(--text-muted);
     }
 
-    /*Mobile optimisations - revisit this*/
+    /*Mobile optimisations*/
     @media (max-width: 560px) {
       .wrapper { padding: 0 16px 60px; }
       header { padding: 40px 0 36px; }
       #grid { grid-template-columns: 1fr 1fr; gap: 7px; }
-      .card { padding: 13px 14px; }
     }
     @media (max-width: 360px) {
       #grid { grid-template-columns: 1fr; }
@@ -296,13 +379,12 @@
       <h1>Ghufrān's Salafi Archive</h1>
       <div class="meta">
         <span>Websites preserved in fear that they could go offline.</span>
-        <span>As static archives, some functions won't work - search works on most sites.</span>
+        <span>As static archives, some functions won't work — search works on most sites.</span>
       </div>
       <div class="divider"></div>
       <a class="cta-link" href="https://beacons.ai/ghufranalmuwahhid" target="_blank" rel="noopener noreferrer">
         YouTube · TikTok · Telegram Institute ↗
       </a>
-
       <form class="search-bar" action="https://www.google.com/search" method="get" target="_blank">
         <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input type="text" name="q" placeholder="Search all websites at once!" autocomplete="off" />
@@ -315,41 +397,226 @@
       <span>98,895 files archived</span>
     </div>
 
+    <!
+      Each card uses data attributes:
+        data-name = display name shown on the card
+        data-desc = short description
+        data-url  = link to the archived site
+    >
     <div id="grid">
-      <div class="card"><div class="card-name">AbdurRahman.org</div><a href="https://ghufrxn.github.io/salafiarchiveabdurrahmanorg/" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">AboveTheThrone.com</div><a href="https://ghufrxn.github.io/salafiarchive/abovethethrone.com/www.abovethethrone.com/arsh/index.html" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">AbuAminaElias.com</div><a href="https://ghufrxn.github.io/salafiarchive/abuaminaelias.com/www.abuaminaelias.com/index.html" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">AbuHakeem.com</div><a href="https://ghufrxn.github.io/salafiarchive/abuhakeem.com/abuhakeem.com/index.html" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">AhlulHadeeth.wordpress.com</div><a href="https://ghufrxn.github.io/salafiarchive/ahlulhadeeth.wordpress.com/ahlulhadeeth.wordpress.com/index.html" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">Aqidah.com</div><a href="https://ghufrxn.github.io/salafiarchive/aqidah.com/www.aqidah.com/creed/index.html" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">Asharis.com</div><a href="https://ghufrxn.github.io/salafiarchive/asharis.com/www.asharis.com/creed/index.html" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">Barelwis.com</div><a href="https://ghufrxn.github.io/salafiarchive/barelwis.com/www.barelwis.com/index.html" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">Bidah.com</div><a href="https://ghufrxn.github.io/salafiarchive/bidah.com/www.bidah.com/index.html" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">Dajjaal.com</div><a href="https://ghufrxn.github.io/salafiarchive/dajjaal.com/www.dajjaal.com/liar/index.html" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">Forum.SalafiRI.com</div><a href="https://ghufrxn.github.io/salafiarchive/forum.salafiri.com/forum.salafiri.com/index.html" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">Ikhwanis.com</div><a href="https://ghufrxn.github.io/salafiarchive/ikhwanis.com/www.ikhwanis.com/index.html" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">IslamAgainstExtremism.com</div><a href="https://ghufrxn.github.io/salafiarchive/islamagainstextremism.com/www.islamagainstextremism.com/index.html" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">IslamJesus.ws</div><a href="https://ghufrxn.github.io/salafiarchive/islamjesus.ws/www.islamjesus.ws/index.html" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">IslamMoses.com</div><a href="https://ghufrxn.github.io/salafiarchive/islammoses.com/im/index.htm" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">Kharijites.com</div><a href="https://ghufrxn.github.io/salafiarchive/kharijites.com/www.kharijites.com/kj/index.htm" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">Manhaj.com</div><a href="https://ghufrxn.github.io/salafiarchive/manhaj.com/www.manhaj.com/manhaj/index.html" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">Maturidis.com</div><a href="https://ghufrxn.github.io/salafiarchive/maturidis.com/www.maturidis.com/maturidi/index.html" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">Mutazilah.com</div><a href="https://ghufrxn.github.io/salafiarchive/mutazilah.com/www.mutazilah.com/index.html" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">Nabahani.com</div><a href="https://ghufrxn.github.io/salafiarchive/nabahani.com/www.nabahani.com/index.html" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">ProphetMuhammad.name</div><a href="https://ghufrxn.github.io/salafiarchive/prophetmuhammad.name/www.prophetmuhammad.name/index.html" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">SalafiRI.com</div><a href="https://ghufrxn.github.io/salafiarchive/salafiri.com/www.salafiri.com/index.html" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">Salafis.com</div><a href="https://ghufrxn.github.io/salafiarchive/salafis.com/www.salafis.com/index.html" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">Takfiris.com</div><a href="https://ghufrxn.github.io/salafiarchive/takfiris.com/www.takfiris.com/takfir/index.html" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">TawhidFirst.com</div><a href="https://ghufrxn.github.io/salafiarchive/tawhidfirst.com/www.tawhidfirst.com/monotheism/index.html" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">TheMadkhalis.com</div><a href="https://ghufrxn.github.io/salafiarchive/themadkhalis.com/www.themadkhalis.com/md/index.html" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">TwelverShia.net</div><a href="https://ghufrxn.github.io/salafiarchive/twelvershia.net/www.twelvershia.net/index.html" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">UmAbdullah.wordpress.com</div><a href="https://ghufrxn.github.io/salafiarchive/umabdullah.wordpress/umabdullah.wordpress.com/index.html" target="_blank">Open site</a></div>
-      <div class="card"><div class="card-name">Wahhabis.com</div><a href="https://ghufrxn.github.io/salafiarchive/wahhabis.com/www.wahhabis.com/index.html" target="_blank">Open site</a></div>
+
+      <div class="card"
+           data-name="AbdurRahman.org"
+           data-desc="A known Salafi website which posts PDFs, videos, and articles."
+           data-url="https://ghufrxn.github.io/salafiarchiveabdurrahmanorg/"></div>
+
+      <div class="card"
+           data-name="AboveTheThrone.com"
+           data-desc="Articles and research clarifying the Islamic belief regarding Allah being Above."
+           data-url="https://ghufrxn.github.io/salafiarchive/abovethethrone.com/www.abovethethrone.com/arsh/index.html"></div>
+
+      <div class="card"
+           data-name="AbuAminaElias.com"
+           data-desc="Islamic articles by Abu Amina Elias covering fiqh, hadith commentary, and contemporary issues."
+           data-url="https://ghufrxn.github.io/salafiarchive/abuaminaelias.com/www.abuaminaelias.com/index.html"></div>
+
+      <div class="card"
+           data-name="AbuHakeem.com"
+           data-desc="Lectures and written works by Abu Hakeem Bilal Davis on Salafi Aqidah and Manhaj."
+           data-url="https://ghufrxn.github.io/salafiarchive/abuhakeem.com/abuhakeem.com/index.html"></div>
+
+      <div class="card"
+           data-name="AhlulHadeeth.wordpress.com"
+           data-desc="An old website which hosts many good articles."
+           data-url="https://ghufrxn.github.io/salafiarchive/ahlulhadeeth.wordpress.com/ahlulhadeeth.wordpress.com/index.html"></div>
+
+      <div class="card"
+           data-name="Aqidah.com"
+           data-desc="Detailed explanations of Islamic creed (Aqidah) as understood by the Salaf."
+           data-url="https://ghufrxn.github.io/salafiarchive/aqidah.com/www.aqidah.com/creed/index.html"></div>
+
+      <div class="card"
+           data-name="Asharis.com"
+           data-desc="A refutation and exposé of Ash'ari theology."
+           data-url="https://ghufrxn.github.io/salafiarchive/asharis.com/www.asharis.com/creed/index.html"></div>
+
+      <div class="card"
+           data-name="Barelwis.com"
+           data-desc="A refutation and exposé of Barelwi beliefs."
+           data-url="https://ghufrxn.github.io/salafiarchive/barelwis.com/www.barelwis.com/index.html"></div>
+
+      <div class="card"
+           data-name="Bidah.com"
+           data-desc="Extensive resources on religious innovation (bid'ah)."
+           data-url="https://ghufrxn.github.io/salafiarchive/bidah.com/www.bidah.com/index.html"></div>
+
+      <div class="card"
+           data-name="Dajjaal.com"
+           data-desc="Articles written on the Dajjal and magic."
+           data-url="https://ghufrxn.github.io/salafiarchive/dajjaal.com/www.dajjaal.com/liar/index.html"></div>
+
+      <div class="card"
+           data-name="Forum.SalafiRI.com"
+           data-desc="A now inactive forum which has useful conversations."
+           data-url="https://ghufrxn.github.io/salafiarchive/forum.salafiri.com/forum.salafiri.com/index.html"></div>
+
+      <div class="card"
+           data-name="Ikhwanis.com"
+           data-desc="A critical examination of the Ikhwaanul Muslimeen (Muslim Brotherhood) movement."
+           data-url="https://ghufrxn.github.io/salafiarchive/ikhwanis.com/www.ikhwanis.com/index.html"></div>
+
+      <div class="card"
+           data-name="IslamAgainstExtremism.com"
+           data-desc="Clarifying Islam's position against terrorism, extremism, and political violence."
+           data-url="https://ghufrxn.github.io/salafiarchive/islamagainstextremism.com/www.islamagainstextremism.com/index.html"></div>
+
+      <div class="card"
+           data-name="IslamJesus.ws"
+           data-desc="The Islamic view of Jesus (Alayhis Salaam)."
+           data-url="https://ghufrxn.github.io/salafiarchive/islamjesus.ws/www.islamjesus.ws/index.html"></div>
+
+      <div class="card"
+           data-name="IslamMoses.com"
+           data-desc="The Islamic perspective on Moses (Alayhis Salaam)."
+           data-url="https://ghufrxn.github.io/salafiarchive/islammoses.com/im/index.htm"></div>
+
+      <div class="card"
+           data-name="Kharijites.com"
+           data-desc="Historical and contemporary analysis of the Kharijite sect and their extremist methodology."
+           data-url="https://ghufrxn.github.io/salafiarchive/kharijites.com/www.kharijites.com/kj/index.htm"></div>
+
+      <div class="card"
+           data-name="Manhaj.com"
+           data-desc="Detailed resources on the Salafi manhaj (methodology) and its principles."
+           data-url="https://ghufrxn.github.io/salafiarchive/manhaj.com/www.manhaj.com/manhaj/index.html"></div>
+
+      <div class="card"
+           data-name="Maturidis.com"
+           data-desc="A refutation and exposé of the Maturidi theology."
+           data-url="https://ghufrxn.github.io/salafiarchive/maturidis.com/www.maturidis.com/maturidi/index.html"></div>
+
+      <div class="card"
+           data-name="Mutazilah.com"
+           data-desc="A study of the misguided Mu'tazilah sect and their heretical positions."
+           data-url="https://ghufrxn.github.io/salafiarchive/mutazilah.com/www.mutazilah.com/index.html"></div>
+
+      <div class="card"
+           data-name="Nabahani.com"
+           data-desc="Refutation of Taqi ud-Din an-Nabhani and Hizb ut-Tahrir's political ideology."
+           data-url="https://ghufrxn.github.io/salafiarchive/nabahani.com/www.nabahani.com/index.html"></div>
+
+      <div class="card"
+           data-name="ProphetMuhammad.name"
+           data-desc="An introduction to the life, character, and message of the Prophet Muhammad ﷺ."
+           data-url="https://ghufrxn.github.io/salafiarchive/prophetmuhammad.name/www.prophetmuhammad.name/index.html"></div>
+
+      <div class="card"
+           data-name="SalafiRI.com"
+           data-desc="The main site of the Salafi Research Institute."
+           data-url="https://ghufrxn.github.io/salafiarchive/salafiri.com/www.salafiri.com/index.html"></div>
+
+      <div class="card"
+           data-name="Salafis.com"
+           data-desc="Articles related to the misuse and misunderstandings towards Salafiyyah."
+           data-url="https://ghufrxn.github.io/salafiarchive/salafis.com/www.salafis.com/index.html"></div>
+
+      <div class="card"
+           data-name="Takfiris.com"
+           data-desc="Exposing the Takfiri methodology and its dangers to the Muslim community."
+           data-url="https://ghufrxn.github.io/salafiarchive/takfiris.com/www.takfiris.com/takfir/index.html"></div>
+
+      <div class="card"
+           data-name="TawhidFirst.com"
+           data-desc="Articles related to Tawhid, and how Shirk manifests today."
+           data-url="https://ghufrxn.github.io/salafiarchive/tawhidfirst.com/www.tawhidfirst.com/monotheism/index.html"></div>
+
+      <div class="card"
+           data-name="TheMadkhalis.com"
+           data-desc="An examination of misuse of the "Madkhali" label."
+           data-url="https://ghufrxn.github.io/salafiarchive/themadkhalis.com/www.themadkhalis.com/md/index.html"></div>
+
+      <div class="card"
+           data-name="TwelverShia.net"
+           data-desc="An amazing website that dismantles the Shi'a."
+           data-url="https://ghufrxn.github.io/salafiarchive/twelvershia.net/www.twelvershia.net/index.html"></div>
+
+      <div class="card"
+           data-name="UmAbdullah.wordpress.com"
+           data-desc="A great website covering many issues. The reason this archive was started!"
+           data-url="https://ghufrxn.github.io/salafiarchive/umabdullah.wordpress/umabdullah.wordpress.com/index.html"></div>
+
+      <div class="card"
+           data-name="Wahhabis.com"
+           data-desc="Clarifying the origin of the 'Wahhabi' label and responding to common misconceptions."
+           data-url="https://ghufrxn.github.io/salafiarchive/wahhabis.com/www.wahhabis.com/index.html"></div>
+
     </div>
 
     <footer>Ghufrān's Salafi Archive — preserved for the sake of knowledge</footer>
 
   </div>
+
+  <script>
+    const isTouch = () => window.matchMedia('(hover: none)').matches;
+
+    // Build inner HTML for each card from data attributes
+    document.querySelectorAll('#grid .card').forEach(card => {
+      const { name, desc, img, url } = card.dataset;
+      card.innerHTML = `
+        <div class="card-base">
+          <div class="card-name">${name}</div>
+          <div class="card-hint">Hover to preview</div>
+        </div>
+        <div class="card-preview">
+          <div class="card-preview-bg" style="background-image:url('${img}')"></div>
+          <div class="card-preview-glass"></div>
+          <div class="card-preview-content">
+            <div>
+              <div class="card-preview-name">${name}</div>
+              <div class="card-preview-desc">${desc}</div>
+            </div>
+            <a class="card-visit-btn" href="${url}" target="_blank" rel="noopener noreferrer">
+              <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
+              Visit Archive
+            </a>
+          </div>
+        </div>
+      `;
+    });
+
+    function expand(card) { card.classList.add('expanded'); }
+    function collapse(card) { card.classList.remove('expanded'); }
+
+    document.querySelectorAll('#grid .card').forEach(card => {
+      // Desktop: hover
+      card.addEventListener('mouseenter', () => { if (!isTouch()) expand(card); });
+      card.addEventListener('mouseleave', () => { if (!isTouch()) collapse(card); });
+
+      // Mobile: tap to toggle; visit button passes through
+      card.addEventListener('click', e => {
+        if (!isTouch()) return;
+        if (e.target.closest('.card-visit-btn')) return;
+        if (card.classList.contains('expanded')) {
+          collapse(card);
+        } else {
+          document.querySelectorAll('#grid .card.expanded').forEach(c => collapse(c));
+          expand(card);
+        }
+      });
+    });
+
+    // Tap outside on mobile collapses all
+    document.addEventListener('click', e => {
+      if (!isTouch()) return;
+      if (!e.target.closest('.card')) {
+        document.querySelectorAll('#grid .card.expanded').forEach(c => collapse(c));
+      }
+    });
+  </script>
 
 </body>
 </html>
