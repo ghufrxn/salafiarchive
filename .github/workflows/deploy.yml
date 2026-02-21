@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Run Pagefind
-        run: npx pagefind --site .
+        run: npx pagefind --site . --glob "**/*.{html,htm}" --exclude-selectors "header,footer,nav,script,style"
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
