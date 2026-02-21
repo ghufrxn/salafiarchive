@@ -445,8 +445,15 @@
             return;
           }
 
-          const top = await Promise.all(search.results.slice(0, 10).map(r => r.data()));
-          resultsEl.innerHTML = top.map(r => `
+          const top = await Promise.all(search.results.slice(0, 30).map(r => r.data()));
+          const seen = new Set();
+          const unique = top.filter(r => {
+            const key = r.meta.title || r.url;
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+          }).slice(0, 10);
+          resultsEl.innerHTML = unique.map(r => `
             <div class="pf-result-item">
               <a href="${r.url}">${r.meta.title || r.url}</a>
               <div class="pf-result-excerpt">${r.excerpt}</div>
