@@ -1,28 +1,24 @@
 name: Build and Deploy with Pagefind
-
 on:
   push:
     branches: [main]
-
 permissions:
   contents: read
   pages: write
   id-token: write
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
+        with:
+          fetch-depth: 0
       - name: Run Pagefind
-        run: npx pagefind --site . --glob "**/*.{html,htm}" --exclude-selectors "header,footer,nav,script,style"
-
+        run: npx pagefind --site . --glob "**/*.html" && npx pagefind --site . --glob "**/*.htm"
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: .
-
   deploy:
     needs: build
     runs-on: ubuntu-latest
