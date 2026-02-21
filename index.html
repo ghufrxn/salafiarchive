@@ -433,7 +433,7 @@
 
           // Lazily load pagefind on first search
           if (!window.__pagefind) {
-            window.__pagefind = await import('/pagefind/pagefind.js');
+            window.__pagefind = await import('/salafiarchive/pagefind/pagefind.js');
             await window.__pagefind.init();
           }
 
