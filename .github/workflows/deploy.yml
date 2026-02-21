@@ -14,7 +14,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Run Pagefind
-        run: npx pagefind --site . --glob "**/*.{html,htm}" --root-selector "html, body" --force-language en
+        run: npx pagefind --site . --glob "**/*.{html,htm}" --root-selector "body"
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
