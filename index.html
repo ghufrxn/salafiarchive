@@ -388,22 +388,74 @@
       <div class="search-wrap">
         <div class="search-bar">
           <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input id="cse-input" type="text" placeholder="Search all archived websites…" autocomplete="off" />
-          <button id="cse-btn" type="button">Search</button>
+          <input id="pf-input" type="text" placeholder="Search all archived websites…" autocomplete="off" />
+          <button id="pf-btn" type="button">Search</button>
         </div>
-        <div class="search-results-wrap">
-          <div class="gcse-searchresults-only"></div>
-        </div>
+        <div id="pf-results" class="search-results-wrap"></div>
       </div>
-      <script async src="https://cse.google.com/cse.js?cx=80e3a624073994811"></script>
-      <script>
-        function doSearch() {
-          var q = document.getElementById('cse-input').value.trim();
-          if (!q) return;
-          google.search.cse.element.getAllElements()['searchresults-only0'].execute(q);
+      <style>
+        #pf-results { display: none; margin-top: 12px; }
+        #pf-results.active { display: block; }
+        .pf-result-item {
+          padding: 12px 16px;
+          margin-bottom: 6px;
+          background: var(--surface);
+          border: 1px solid var(--border);
+          border-radius: 8px;
+          transition: border-color 0.2s;
         }
-        document.getElementById('cse-btn').addEventListener('click', doSearch);
-        document.getElementById('cse-input').addEventListener('keydown', function(e) {
+        .pf-result-item:hover { border-color: var(--border-hover); }
+        .pf-result-item a {
+          font-size: 0.85rem;
+          font-weight: 500;
+          color: var(--accent);
+          text-decoration: none;
+        }
+        .pf-result-item a:hover { text-decoration: underline; }
+        .pf-result-excerpt {
+          font-size: 0.78rem;
+          color: var(--text-dim);
+          margin-top: 4px;
+          line-height: 1.5;
+        }
+        .pf-no-results {
+          font-size: 0.82rem;
+          color: var(--text-muted);
+          padding: 10px 0;
+        }
+        mark { background: rgba(254, 154, 84, 0.25); color: var(--accent); border-radius: 2px; padding: 0 2px; }
+      </style>
+      <script>
+        async function doSearch() {
+          const q = document.getElementById('pf-input').value.trim();
+          const resultsEl = document.getElementById('pf-results');
+          if (!q) { resultsEl.classList.remove('active'); return; }
+
+          // Lazily load pagefind on first search
+          if (!window.__pagefind) {
+            window.__pagefind = await import('/pagefind/pagefind.js');
+            await window.__pagefind.init();
+          }
+
+          const search = await window.__pagefind.search(q);
+          resultsEl.classList.add('active');
+
+          if (!search.results.length) {
+            resultsEl.innerHTML = '<div class="pf-no-results">No results found.</div>';
+            return;
+          }
+
+          const top = await Promise.all(search.results.slice(0, 10).map(r => r.data()));
+          resultsEl.innerHTML = top.map(r => `
+            <div class="pf-result-item">
+              <a href="${r.url}">${r.meta.title || r.url}</a>
+              <div class="pf-result-excerpt">${r.excerpt}</div>
+            </div>
+          `).join('');
+        }
+
+        document.getElementById('pf-btn').addEventListener('click', doSearch);
+        document.getElementById('pf-input').addEventListener('keydown', function(e) {
           if (e.key === 'Enter') doSearch();
         });
       </script>
@@ -573,7 +625,7 @@
 
     </div>
 
-    <footer>Ghufrān's Salafi Archive — preserved for the sake of knowledge</footer>
+    <footer>Ghufrān's Salafi Archive - preserved for the sake of knowledge</footer>
 
   </div>
 
